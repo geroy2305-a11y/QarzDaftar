@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#145c4b">
+<title>Qarz Daftar</title>
+<style>
+:root{--green:#145c4b;--green2:#1d8068;--bg:#f3f7f5;--ink:#18342d;--muted:#71827c;--line:#e1eae5;--white:#fff;--red:#b94c48;--gold:#d9a441}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:18px 14px 40px}.hero{background:linear-gradient(135deg,#145c4b,#23866d);color:#fff;border-radius:24px;padding:22px 20px;box-shadow:0 12px 28px #145c4b20}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:22px;font-weight:800;letter-spacing:.2px}.sub{font-size:13px;opacity:.85;margin-top:3px}.chip{font-size:12px;border:1px solid #ffffff50;padding:7px 10px;border-radius:99px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.stat{background:#ffffff16;border:1px solid #ffffff24;border-radius:15px;padding:12px}.stat small{display:block;font-size:11px;opacity:.85}.stat strong{display:block;font-size:clamp(14px,3vw,20px);margin-top:5px;word-break:break-word}
+main{margin-top:17px}.panel{background:var(--white);border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:14px;box-shadow:0 4px 14px #18342d05}.panel h2{font-size:17px;margin:0 0 13px}
+.tabs{display:flex;background:#e7efeb;padding:4px;border-radius:12px;gap:4px;margin-bottom:14px}.tab{flex:1;border:0;background:transparent;padding:10px 8px;border-radius:9px;font-weight:700;color:#557168;cursor:pointer}.tab.active{background:#fff;color:var(--green);box-shadow:0 2px 6px #18342d12}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;font-weight:700;color:#61766e}input,select{width:100%;padding:12px;border:1px solid #dce7e1;border-radius:11px;background:#fbfdfc;color:var(--ink);font:inherit;outline:none}input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #1d806812}
+button{font:inherit;cursor:pointer}.primary{border:0;background:var(--green);color:white;padding:12px 16px;border-radius:12px;font-weight:750;width:100%;margin-top:12px}.primary:hover{background:var(--green2)}.secondary{background:#edf5f1;color:var(--green);border:1px solid #d8e9e0;padding:9px 12px;border-radius:10px;font-weight:700}
+.toolbar{display:flex;gap:9px;align-items:center;margin-bottom:12px}.toolbar input{flex:1}.toolbar select{max-width:150px}.list{display:flex;flex-direction:column;gap:9px}.item{border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;gap:12px;align-items:center}.avatar{width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:#e7f2ec;color:var(--green);display:grid;place-items:center;font-weight:800}.info{min-width:0;flex:1}.name{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meta{font-size:12px;color:var(--muted);margin-top:3px}.amount{text-align:right;font-weight:800;white-space:nowrap}.amount.red{color:var(--red)}.amount.green{color:var(--green)}.item-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.smallbtn{border:1px solid var(--line);background:#fff;color:#50665e;padding:6px 9px;border-radius:8px;font-size:12px;font-weight:700}.smallbtn.pay{color:var(--green);background:#edf7f1}.empty{text-align:center;color:var(--muted);padding:22px 8px;font-size:14px}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}.foot{font-size:11px;color:#82928b;text-align:center;margin:16px 0}.modal-back{position:fixed;inset:0;background:#0b211bcc;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modal{width:min(420px,100%);background:#fff;border-radius:20px;padding:20px}.modal h3{margin:0 0 12px}.modal .primary{margin-top:10px}.close{float:right;border:0;background:#f1f5f2;border-radius:8px;padding:5px 9px}
+@media(max-width:520px){.stats{gap:7px}.stat{padding:10px 8px}.stat strong{font-size:14px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar{flex-wrap:wrap}.toolbar select{max-width:none}.item{padding:11px}.amount{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="top"><div><div class="brand">📒 Qarz Daftar</div><div class="sub">Qarzlaringiz — tartibli va nazoratda</div></div><span class="chip">UZS • so‘m</span></div>
+ <div class="stats">
+  <div class="stat"><small>Men qarz berganman</small><strong id="lentTotal">0 so‘m</strong></div>
+  <div class="stat"><small>Men qarzdorman</small><strong id="borrowTotal">0 so‘m</strong></div>
+  <div class="stat"><small>Jami ochiq qarz</small><strong id="openTotal">0 so‘m</strong></div>
+ </div>
+</header>
+<main>
+<section class="panel">
+<h2>Yangi qarz qo‘shish</h2>
+<div class="tabs"><button class="tab active" data-kind="lent">Men qarz berdim</button><button class="tab" data-kind="borrow">Men qarz oldim</button></div>
+<form id="debtForm">
+<div class="grid">
+ <div class="field"><label for="person">Ism / mijoz</label><input id="person" placeholder="Masalan: Anvar aka" required maxlength="80"></div>
+ <div class="field"><label for="phone">Telefon (ixtiyoriy)</label><input id="phone" type="tel" placeholder="+998 ..." maxlength="25"></div>
+ <div class="field"><label for="amount">Qarz summasi (so‘m)</label><input id="amount" type="number" min="1" step="1" placeholder="500000" required></div>
+ <div class="field"><label for="date">Qarz yozilgan sana</label><input id="date" type="date" required></div>
+ <div class="field"><label for="due">Qaytarish muddati</label><input id="due" type="datetime-local" required></div>
+ <div class="field full"><label for="details">Izoh (ixtiyoriy)</label><input id="details" placeholder="Masalan: yem-xashak uchun"></div>
+</div>
+<button class="primary" type="submit">+ Qarz saqlash</button>
+</form>
+</section>
+<section class="panel">
+<h2>Qarzlar ro‘yxati</h2>
+<div class="toolbar"><input id="search" placeholder="🔎 Ism bo‘yicha qidirish"><select id="filter"><option value="all">Barcha qarzlar</option><option value="lent">Men bergan</option><option value="borrow">Men olgan</option><option value="open">Ochiq qarzlar</option><option value="paid">Yopilgan</option></select></div>
+<div id="debtList" class="list"></div>
+<div class="note">Ma’lumotlar ushbu qurilmadagi brauzerda saqlanadi. Brauzer ma’lumotlarini tozalashdan oldin zaxira nusxa oling.</div>
+</section>
+<section class="panel">
+<h2>⏰ Eslatma / budilnik</h2>
+<p class="note" style="margin:0 0 12px">Qarz muddati kelganda bildirishnoma chiqaradi. Eslatmalar ishlashi uchun ilova (brauzer) ochiq turishi kerak. Bildirishnomaga ruxsat bering.</p>
+<button class="secondary" id="notifBtn" style="width:100%">🔔 Bildirishnomalarga ruxsat berish</button>
+<div class="note" id="notifStatus" aria-live="polite"></div>
+</section>
+<section class="panel">
+<h2>Zaxira nusxa</h2>
+<div class="grid">
+<button class="secondary" id="exportBtn">⬇ Ma’lumotni yuklab olish</button>
+<label class="secondary" style="text-align:center;cursor:pointer">⬆ Zaxirani tiklash<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+</div>
+<p class="note">JSON faylini saqlab qo‘ysangiz, ma’lumotlarni keyin qayta tiklashingiz mumkin.</p>
+</section>
+</main>
+<div class="foot">Qarz Daftar • Oddiy va qulay hisob-kitob</div>
+</div>
+<div class="modal-back" id="payModal">
+<div class="modal"><button class="close" id="closeModal">✕</button><h3>To‘lov kiritish</h3><p id="payPerson" class="meta"></p><div class="field"><label for="payAmount">To‘langan summa (so‘m)</label><input id="payAmount" type="number" min="1" step="1" placeholder="Summani kiriting"></div><button class="primary" id="confirmPay">To‘lovni saqlash</button></div>
+</div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let debts=load(), kind='lent', payingId=null;
+const today=new Date(); $('date').value=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const tomorrow=new Date(today.getTime()+24*60*60*1000);tomorrow.setHours(9,0,0,0);
+$('due').value=new Date(tomorrow.getTime()-tomorrow.getTimezoneOffset()*60000).toISOString().slice(0,16);
+function load(){try{return JSON.parse(localStorage.getItem('qarzDaftarData')||'[]')}catch(e){return []}}
+function save(){localStorage.setItem('qarzDaftarData',JSON.stringify(debts));debts.forEach(scheduleNativeReminder);render()}
+function fmt(n){return new Intl.NumberFormat('uz-UZ',{maximumFractionDigits:0}).format(n)+' so‘m'}
+function remaining(d){return Math.max(0,Number(d.amount)-Number(d.paid||0))}
+function scheduleNativeReminder(d){
+ try{
+  if(window.AndroidReminder && d.due && remaining(d)>0){
+   const when=new Date(d.due).getTime();
+   if(Number.isFinite(when)&&when>Date.now()){
+    const title='⏰ Qarz muddati keldi';
+    const message=(d.kind==='lent'?'Qarz qaytarilishi kerak: ':'Siz qarzni qaytarishingiz kerak: ')+d.person+' — '+fmt(remaining(d));
+    window.AndroidReminder.schedule(String(d.id),when,title,message);
+   }
+  }
+ }catch(e){}
+}
+function cancelNativeReminder(d){try{if(window.AndroidReminder)window.AndroidReminder.cancel(String(d.id))}catch(e){}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const lent=debts.filter(d=>d.kind==='lent').reduce((s,d)=>s+remaining(d),0),borrow=debts.filter(d=>d.kind==='borrow').reduce((s,d)=>s+remaining(d),0);
+ $('lentTotal').textContent=fmt(lent);$('borrowTotal').textContent=fmt(borrow);$('openTotal').textContent=fmt(lent+borrow);
+ const q=$('search').value.trim().toLocaleLowerCase(), f=$('filter').value;
+ const rows=debts.filter(d=>(!q||d.person.toLocaleLowerCase().includes(q)||(d.phone||'').includes(q))&&(f==='all'||(f==='open'?remaining(d)>0:f==='paid'?remaining(d)===0:d.kind===f))).sort((a,b)=>b.created-a.created);
+ $('debtList').innerHTML=rows.length?rows.map(d=>`<article class="item">
+ <div class="avatar">${esc(d.person.trim().slice(0,1).toUpperCase()||'?')}</div>
+ <div class="info"><div class="name">${esc(d.person)}</div><div class="meta">${d.kind==='lent'?'Men qarz berganman':'Men qarz olganman'} • ${esc(d.date)}${d.phone?' • '+esc(d.phone):''}</div><div class="meta">Muddat: ${esc(d.due?d.due.replace('T',' '):'Belgilanmagan')}</div><div class="meta">${d.note?esc(d.note):'Izoh yo‘q'} • To‘langan: ${fmt(Number(d.paid||0))}</div>
+ <div class="item-actions">${remaining(d)>0?`<button class="smallbtn pay" data-pay="${d.id}">To‘lov kiritish</button>`:''}<button class="smallbtn" data-edit="${d.id}">Tahrirlash</button><button class="smallbtn" data-delete="${d.id}">O‘chirish</button></div></div>
+ <div class="amount ${d.kind==='lent'?'green':'red'}">${fmt(remaining(d))}<div class="meta">${remaining(d)===0?'Yopilgan':'Qoldiq'}</div></div></article>`).join(''):'<div class="empty">Hozircha qarzlar yo‘q.<br>Yuqoridagi formadan qarz qo‘shing.</div>';
+}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{kind=btn.dataset.kind;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn))}));
+$('debtForm').addEventListener('submit',e=>{e.preventDefault();const amount=Number($('amount').value),due=$('due').value;if(!Number.isFinite(amount)||amount<=0)return alert('Summani to‘g‘ri kiriting.');if(!due)return alert('Qaytarish muddatini belgilang.');debts.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),kind,person:$('person').value.trim(),phone:$('phone').value.trim(),amount,paid:0,date:$('date').value,due,note:$('details').value.trim(),created:Date.now(),reminded:false});$('debtForm').reset();$('date').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);const nd=new Date(Date.now()+24*60*60*1000);nd.setHours(9,0,0,0);$('due').value=new Date(nd.getTime()-nd.getTimezoneOffset()*60000).toISOString().slice(0,16);save()});
+$('search').addEventListener('input',render);$('filter').addEventListener('change',render);
+$('debtList').addEventListener('click',e=>{
+ const pay=e.target.closest('[data-pay]'),del=e.target.closest('[data-delete]'),edit=e.target.closest('[data-edit]');
+ if(pay){const d=debts.find(x=>x.id===pay.dataset.pay);if(!d)return;payingId=d.id;$('payPerson').textContent=d.person+' • Qoldiq: '+fmt(remaining(d));$('payAmount').max=remaining(d);$('payAmount').value='';$('payModal').style.display='flex';return}
+ if(del){const d=debts.find(x=>x.id===del.dataset.delete);if(d&&confirm(d.person+' qarz yozuvini o‘chirasizmi?')){cancelNativeReminder(d);debts=debts.filter(x=>x.id!==d.id);save()}return}
+ if(edit){const d=debts.find(x=>x.id===edit.dataset.edit);if(!d)return;const name=prompt('Ism:',d.person);if(name===null)return;const amount=prompt('Asl qarz summasi (so‘m):',d.amount);if(amount===null)return;const n=Number(amount);if(!name.trim()||!Number.isFinite(n)||n<=0)return alert('Ma’lumot noto‘g‘ri.');d.person=name.trim();d.amount=n;d.phone=prompt('Telefon:',d.phone||'')??d.phone;d.note=prompt('Izoh:',d.note||'')??d.note;save()}
+});
+$('closeModal').onclick=()=>{$('payModal').style.display='none';payingId=null};
+$('payModal').addEventListener('click',e=>{if(e.target===$('payModal'))$('payModal').style.display='none'});
+$('confirmPay').onclick=()=>{const d=debts.find(x=>x.id===payingId),n=Number($('payAmount').value);if(!d||!Number.isFinite(n)||n<=0||n>remaining(d))return alert('To‘lov summasi qoldiq qarzdan oshmasligi kerak.');d.paid=Number(d.paid||0)+n;d.payments=d.payments||[];d.payments.push({amount:n,date:new Date().toISOString().slice(0,10)});if(remaining(d)===0)cancelNativeReminder(d);$('payModal').style.display='none';payingId=null;save()};
+$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(debts,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='qarz-daftar-zaxira.json';a.click();URL.revokeObjectURL(url)};
+$('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!Array.isArray(data)||!data.every(d=>d&&d.id&&d.person&&Number(d.amount)>0))throw Error();if(confirm('Zaxira hozirgi yozuvlar o‘rniga yuklansinmi?')){debts=data;save()}}catch(err){alert('Zaxira fayli noto‘g‘ri.')}e.target.value=''});
+function updateNotifStatus(){if(!('Notification' in window)){$('notifStatus').textContent='Bu brauzer bildirishnomalarni qo‘llamaydi.';return}
+$('notifStatus').textContent=Notification.permission==='granted'?'Bildirishnomalar yoqilgan.':'Ruxsat holati: '+(Notification.permission==='denied'?'bloklangan':'hali berilmagan');}
+$('notifBtn').onclick=async()=>{if(!('Notification' in window)){alert('Brauzer bildirishnomalarni qo‘llamaydi.');return}const permission=await Notification.requestPermission();updateNotifStatus();if(permission==='granted')new Notification('Qarz Daftar',{body:'Qarz muddati eslatmalari yoqildi.'})};
+function checkDueReminders(){if(!('Notification' in window)||Notification.permission!=='granted')return;const now=Date.now();let changed=false;debts.forEach(d=>{if(remaining(d)>0&&d.due&&!d.reminded&&new Date(d.due).getTime()<=now){new Notification('⏰ Qarz muddati keldi',{body:(d.kind==='lent'?'Qarz qaytarilishi kerak: ':'Siz qarzni qaytarishingiz kerak: ')+d.person+' — '+fmt(remaining(d))});d.reminded=true;changed=true}});if(changed)localStorage.setItem('qarzDaftarData',JSON.stringify(debts))}
+updateNotifStatus();setInterval(checkDueReminders,30000);checkDueReminders();
+render();
+})();
+</script>
+</body>
+</html>
